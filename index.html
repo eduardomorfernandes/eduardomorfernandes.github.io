@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eduardo Fernandes | Tech Lead & Software Engineer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      overscroll-behavior-y: none;
+      touch-action: manipulation;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(0,122,255,0.25), transparent 50%),
+        radial-gradient(circle at bottom right, rgba(255,0,150,0.25), transparent 50%);
+      animation: floatBackground 12s ease-in-out infinite alternate;
+      z-index: -1;
+      pointer-events: none;
+    }
+    @keyframes floatBackground {
+      0% { transform: translate(0,0); opacity: .5; }
+      50% { transform: translate(25px,-25px); opacity: .7; }
+      100% { transform: translate(-25px,25px); opacity: .5; }
+    }
+    body { margin:0; font-family:Arial, sans-serif; background:#f4f7fa; color:#f5f5f5; }
+    header {
+      background:linear-gradient(135deg,#001f3f,#007bff);
+      padding:80px 20px; text-align:center; color:white;
+      display:flex; flex-direction:column; align-items:center; gap:20px;
+      position:relative;
+    }
+    h1 { margin:0; font-weight:700; text-shadow:0 0 10px rgba(255,255,255,.6); font-size:clamp(1.8rem,4vw,3rem); }
+    h2 { margin-top:10px; font-weight:400; color:#e6e6e6; font-size:clamp(1.2rem,2.5vw,1.8rem); }
+    p, li, a { font-size:clamp(.95rem,2vw,1.1rem); }
+    nav {
+      background:rgba(0,0,50,.6); backdrop-filter:blur(8px);
+      display:flex; justify-content:center; gap:40px;
+      padding:15px 0; position:sticky; top:0; z-index:10;
+      box-shadow:0 4px 10px rgba(0,0,0,.2);
+    }
+    nav a { color:#fff; text-decoration:none; font-weight:bold; transition:.3s; font-size:1.1rem; }
+    nav a:hover { color:#0056ff; text-shadow:0 0 8px #0056ff; }
+    section { margin:0; padding:0; display:block; }
+    .parallax-section {
+      transition: background-position 0.4s ease-out, opacity 0.3s ease-out;
+      margin:0;
+      padding:0;
+     
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: contain; /* Show full image */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: scroll; /* More reliable for full-image rendering */
+      background-color: #000; /* Fallback background behind images */
+    }
+    .parallax-section::after {
+      content:"↓ Scroll"; position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+      font-size:1.1rem; color:#fff; opacity:.85; letter-spacing:1px; animation:scrollPulse 1.8s infinite;
+    }
+    @keyframes scrollPulse {
+      0% { opacity:.4; transform:translate(-50%,0); }
+      50% { opacity:1; transform:translate(-50%,-6px); }
+      100% { opacity:.4; transform:translate(-50%,0); }
+    }
+    .parallax-section::before {
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45)); z-index:0;
+    }
+    .content-panel, section * { position:relative; z-index:1; }
+    .content-panel {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    footer {
+      font-size: 1rem;
+      background:#001a33; padding:25px; text-align:center; color:#d0d8e0;
+      box-shadow:0 -4px 10px rgba(0,0,0,.2); font-size:.9rem;
+    }
+    ul { padding-left:20px; line-height:1.6; }
+    .skill-grid, .timeline-grid {
+      display:grid; gap:20px; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    }
+    .skill-card, .timeline-card {
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      min-width: 100%; /* Fit full page width */
+      max-width: 100%;
+    }
+    @media(max-width:700px){ .content-panel{padding:50px 30px;} }
+    @media(max-width:600px){ .content-panel{padding:40px 22px;} }
+    @media(max-width:768px){ .parallax-section{background-attachment:scroll;} }
+      .timeline-card {
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      min-width: clamp(260px, 30vw, 340px);
+    }
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .carousel-track {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      scroll-snap-type: x mandatory;
+      padding: 20px 5vw;
+      scroll-padding-inline: 5vw;
+    }
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+    #timeline-carousel {
+      direction: rtl;
+      flex-direction: row-reverse;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      font-size: 2rem;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 5;
+      transition: 0.3s;
+    }
+    .carousel-btn.left {
+      left: 10px;
+    }
+    .carousel-btn.right {
+      right: 10px;
+    }
+    .carousel-btn:hover {
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-50%) scale(1.1);
+    }
+      /* Improved responsiveness */
+    @media (max-width: 1100px) {
+      .content-panel {
+        padding: 32px 18px;
+      }
+      .timeline-card, .skill-card {
+        min-width: 260px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        gap: 18px;
+        padding: 10px 0;
+        flex-wrap: wrap;
+      }
+      .content-panel {
+        padding: 28px 16px;
+      }
+      h1 { font-size: 1.9rem; }
+      h2 { font-size: 1.3rem; }
+      p, li, a { font-size: 0.95rem; }
+    }
+
+    @media (max-width: 700px) {
+      .parallax-section {
+        min-height: 90vh;
+        background-size: cover;
+      }
+      header { padding: 50px 14px; }
+      .content-panel { padding: 24px 14px; }
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.1rem; }
+      p, li { font-size: 0.85rem; }
+
+      .timeline-card, .skill-card {
+        min-width: 200px;
+      }
+
+      .carousel-btn {
+        font-size: 1.4rem;
+        padding: 3px 8px;
+      }
+    }
+      /* Hover effects for contact panels */
+    .contact-panel {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .contact-panel:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+      /* Hover effects for contact panels */
+    .contact-panel {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    /* Default hover */
+    .contact-panel:hover {
+      transform: translateY(-6px) scale(1.03);
+    }
+    /* Email: warm orange glow */
+    #contact .content-panel a:nth-of-type(1) .contact-panel:hover {
+      box-shadow: 0 8px 20px rgba(255,140,0,0.45);
+    }
+    /* LinkedIn: blue glow */
+    #contact .content-panel a:nth-of-type(2) .contact-panel:hover {
+      box-shadow: 0 8px 20px rgba(0,119,181,0.45);
+    }
+    /* GitHub: green glow */
+    #contact .content-panel a:nth-of-type(3) .contact-panel:hover {
+      box-shadow: 0 8px 20px rgba(0,200,120,0.45);
+    }
+      /* Desktop-specific transitions */
+    @media (min-width: 900px) {
+      .parallax-section {
+        transition: background-position 0.5s ease-out, opacity 0.4s ease-out;
+      }
+      .content-panel {
+        animation: fadeInDesktop 0.8s ease both;
+      }
+      @keyframes fadeInDesktop {
+        0% { opacity: 0; transform: translateY(25px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+    }
+
+    /* Mobile-specific transitions */
+    @media (max-width: 899px) {
+      .parallax-section {
+        transition: opacity 0.35s ease-out;
+      }
+      .content-panel {
+        animation: fadeInMobile 0.6s ease both;
+      }
+      @keyframes fadeInMobile {
+        0% { opacity: 0; transform: translateY(15px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <img src="assets/profile_photo.jpg" alt="Profile Photo" style="width:140px;height:140px;object-fit:cover;border-radius:50%;box-shadow:0 4px 12px rgba(0,0,0,.4);margin-bottom:15px;" />
+      <h1>Eduardo Fernandes</h1>
+      <h2 id="typed-text" style="min-height:1.5em;"></h2>
+      <p style="max-width:650px;margin:20px auto 0;line-height:1.6;color:#f0f0f0;">Building reliable, scalable, and maintainable software systems by combining research, engineering, and leadership.</p>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#about">About Me</a>
+    <a href="#skills">Skills</a>
+    <a href="#timeline">Work Experience</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="about" class="parallax-section" style="background-image:url('assets/parallax/about_me_section.jpg');">
+    <div class="content-panel">
+      <h2>About Me</h2>
+      <p>I am a technology leader with 14 years of experience delivering reliable, scalable, and maintainable software systems across Brazil, Canada, and Europe. My background blends hands-on engineering with team leadership, having guided development teams of 5–10+ engineers and mentored more than 30 researchers and interns. I enjoy working at the intersection of architecture, backend engineering, DevOps, and AI/ML—ensuring that technical execution aligns with product and business needs.</p>
+      <p>Throughout my career, I’ve contributed to over ten industry-grade software products for organizations such as Petrobras, GOVBR, SUS-MS, and international research partners. I specialize in modernizing legacy applications, improving CI/CD workflows, building cloud-native systems, and introducing automation that strengthens software quality and accelerates delivery. My applied research in AI-enhanced development pipelines also gained attention from Apache and Red Hat engineering communities.</p>
+      <p>As a leader, I value clarity, collaboration, and pragmatic decision-making. I’m committed to creating an environment where engineers can grow, teams can move efficiently, and products can be delivered with high technical standards. My approach balances technical depth with people-centered leadership, enabling teams to execute effectively while fostering long-term engineering excellence.</p>
+    </div>
+  </section>
+
+  <section id="skills" class="parallax-section" style="background-image:url('assets/parallax/skills_section.jpg');">
+    <div class="content-panel">
+      <h2>Skills</h2>
+      <p><strong>Programming Languages & Scripting:</strong> C/C++, CSS, HTML, Java/JS, JSON, Perl, PHP, Python, R, SQL, VB/VB.NET, XML</p>
+      <p><strong>Development Tools & Frameworks:</strong> JUnit, NVIDIA CUDA, NumPy, npm, OpenCV, SBOM, Selenium, Spring, Weka</p>
+      <p><strong>DevOps, Cloud & Version Control:</strong> Azure DevOps, Docker, GitHub, GitLab, Jenkins, Kubernetes</p>
+      <p><strong>DB & Data Management:</strong> Hadoop, MongoDB, MySQL, Neo4J, PostgreSQL, Redis, SQLite</p>
+      <p><strong>IDEs, OS & Productivity:</strong> Android Studio, Eclipse, IntelliJ, Linux (Debian/Ubuntu), NetBeans, Office 365, Visual Studio, VS Code, Windows/WSL</p>
+      <p><strong>Collaboration, Modeling & AI Tools:</strong> Astah, Audacity, Bizagi Modeler, ChatGPT, Copilot, Figma, Fluid UI, Gemini, Gimp, Miro, Slack, Trello, Wireshark</p>
+    </div>
+  </section>
+
+  <section id="timeline" class="parallax-section" style="background-image:url('assets/parallax/timeline_section.jpg');">
+  <div class="content-panel">
+    <h2>Work Experience</h2>
+
+    <style>
+      .collapse-item { background: rgba(255,255,255,0.9); color:#000; margin:14px 0; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); overflow:hidden; }
+      .collapse-header { padding:18px; font-weight:bold; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+      .collapse-header:hover { background:rgba(240,240,240,0.9); }
+      .collapse-content { max-height:0; overflow:hidden; transition:max-height 0.35s ease; padding:0 18px; }
+      .collapse-content.open { padding:18px; }
+    </style>
+
+    <div id="timeline-collapsible">
+
+      <!-- 2025 -->
+      <div class="collapse-item">
+        <div class="collapse-header" onclick="toggleCollapse(this)">2025 <span>▾</span></div>
+        <div class="collapse-content">
+          <p><strong>Lecturer at SENAI-SP University Center (08/2025–11/2025)</strong><br>Courses: Back-end Development, IT & Connectivity</p>
+          <p><strong>Data Science & ML Instructor at Inteli (07/2025–10/2025)</strong><br>Roles: Instructor of Predictive Models (37 engineers), final coursework advisor (5), scientific initiation advisor (1)</p>
+          <p><strong>Postdoctoral Fellow at USP & Shell (05/2025–07/2025)</strong><br>Areas: DevOps, AI, MLOps</p>
+          <p><strong>Assistant Professor at UPM Alphaville (01/2025–05/2025)</strong><br>Roles: Lecturer (Algorithms, Automata, Numerical Methods), Head of Research Group (4 students)</p>
+        </div>
+      </div>
+
+      <!-- 2023–2024 -->
+      <div class="collapse-item">
+        <div class="collapse-header" onclick="toggleCollapse(this)">2023–2024 <span>▾</span></div>
+        <div class="collapse-content">
+          <p><strong>Instructional Designer at UPM Higienópolis (08/2024–12/2024)</strong><br>Courses: AI & IoT in Agribusiness, Statistics for Journalists</p>
+          <p><strong>Lecturer at UNICESUSC (08/2024–09/2024)</strong><br>Courses: Agile Software Processes, Emerging Tech Architectures, Disruptive Languages</p>
+          <p><strong>Assistant Professor at Syddansk Universitet (06/2023–06/2024)</strong><br>Roles: Lecturer in Advanced Software Engineering; AI/LLM advisory</p>
+          <p><strong>Postdoctoral Fellow at UFMG (03/2023–05/2023)</strong><br>Areas: AI, IoT, Software Engineering</p>
+        </div>
+      </div>
+
+      <!-- 2021–2022 -->
+      <div class="collapse-item">
+        <div class="collapse-header" onclick="toggleCollapse(this)">2021–2022 <span>▾</span></div>
+        <div class="collapse-content">
+          <p><strong>Postdoctoral Fellow at Queen's University (09/2021–10/2022)</strong><br>Roles: Advisor (25+), IT/IoT technician, lab manager</p>
+          <p><strong>Lecturer at UFMS (03/2021–07/2021)</strong><br>Courses: Databases, HCI, Software Engineering</p>
+        </div>
+      </div>
+
+      <!-- 2018–2019 -->
+      <div class="collapse-item">
+        <div class="collapse-header" onclick="toggleCollapse(this)">2018–2019 <span>▾</span></div>
+        <div class="collapse-content">
+          <p><strong>Software Engineering Intern at Tecgraf Institute & Petrobras (08/2018–02/2019)</strong><br>Roles: Tech lead (7+ engineers), backend developer, instructor</p>
+        </div>
+      </div>
+
+      <!-- 2017 -->
+      <div class="collapse-item">
+        <div class="collapse-header" onclick="toggleCollapse(this)">2017 <span>▾</span></div>
+        <div class="collapse-content">
+          <p><strong>Data & Network Analyst at Newcastle University (11/2017–12/2017)</strong><br>Roles: Backend developer, research scientist</p>
+          <p><strong>Software Engineering Intern at LES/PUC-Rio & GOVBR (02/2017–05/2017)</strong><br>Roles: Tech lead (5 engineers), instructor</p>
+        </div>
+      </div>
+
+      <!-- 2012–2014 -->
+      <div class="collapse-item">
+        <div class="collapse-header" onclick="toggleCollapse(this)">2012–2014 <span>▾</span></div>
+        <div class="collapse-content">
+          <p><strong>Software Engineering Intern at LEDES/UFMS & SUS-MS (02/2014–06/2014)</strong><br>Roles: Tech lead (10 engineers), Product Owner, full stack developer</p>
+          <p><strong>Research Intern at UFMS (07/2012–12/2014)</strong><br>Areas: Bioinformatics, Software Engineering</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleCollapse(header) {
+      const item = header.parentElement;
+      const content = item.querySelector('.collapse-content');
+      const icon = header.querySelector('span');
+      const all = document.querySelectorAll('#timeline-collapsible .collapse-item');
+
+      all.forEach(i => {
+        const c = i.querySelector('.collapse-content');
+        const ic = i.querySelector('.collapse-header span');
+        if (i !== item) {
+          c.style.maxHeight = null;
+          c.classList.remove('open');
+          ic.textContent = '▾';
+        }
+      });
+
+      if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        content.style.maxHeight = null;
+        content.classList.remove('open');
+        icon.textContent = '▾';
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.classList.add('open');
+        icon.textContent = '▴';
+      }
+    }
+  </script>
+</section>
+
+        <section id="contact" class="parallax-section" style="background-image:url('assets/parallax/contact_section.jpg');">
+    <div class="content-panel">
+      <h2>Contact</h2>
+
+      <div style="display:flex; gap:30px; justify-content:center; flex-wrap:wrap;">
+
+        <!-- Email Panel -->
+        <a href="mailto:emfernandes@acm.org" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit;">
+          <div class="contact-panel" style="background:rgba(255,255,255,0.9); color:#000; padding:25px; border-radius:15px; width:220px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2); cursor:pointer;">
+            <img src="assets/icons/email_clear.png" alt="Email" style="width:80px; height:80px; object-fit:contain;" />
+            <p style="margin-top:15px; font-weight:bold;">My email</p>
+          </div>
+        </a>
+
+        <!-- LinkedIn Panel -->
+        <a href="https://www.linkedin.com/in/emf-softw-eng/" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit;">
+          <div class="contact-panel" style="background:rgba(255,255,255,0.9); color:#000; padding:25px; border-radius:15px; width:220px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2); cursor:pointer;">
+            <img src="assets/icons/worker_clear.png" alt="LinkedIn" style="width:80px; height:80px; object-fit:contain;" />
+            <p style="margin-top:15px; font-weight:bold;">My LinkedIn</p>
+          </div>
+        </a>
+
+        <!-- GitHub Panel -->
+        <a href="https://github.com/eduardomorfernandes" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:inherit;">
+          <div class="contact-panel" style="background:rgba(255,255,255,0.9); color:#000; padding:25px; border-radius:15px; width:220px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2); cursor:pointer;">
+            <img src="assets/icons/laptop_clear.png" alt="GitHub" style="width:80px; height:80px; object-fit:contain;" />
+            <p style="margin-top:15px; font-weight:bold;">My GitHub</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2025 Eduardo Fernandes — Photos by Pedro Stanke (<a href="https://www.stanke.com.br/" target="_blank" rel="noopener noreferrer" style="color:#d0d8e0; text-decoration:underline;">stanke.com.br</a>) — Website and icons created with AI support using ChatGPT</footer>
+
+  <style>
+    footer a {
+      font-size: inherit !important;
+    }
+  </style>
+
+  <script>
+    const typedEl = document.getElementById('typed-text');
+    const messages=["Tech Lead & Software Engineer","Bridging Research and Industry","Designing Reliable Software Systems"]; let msgIndex=0; let charIndex=0;
+    function typeLoop(){ if(!typedEl) return; const cur=messages[msgIndex]; typedEl.textContent=cur.slice(0,charIndex);
+      charIndex++; if(charIndex>cur.length){ setTimeout(()=>{ charIndex=0; msgIndex=(msgIndex+1)%messages.length;},1200);} setTimeout(typeLoop,90);} typeLoop();
+  </script>
+
+  <script>
+    function scrollCarousel(id, direction) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const card = el.querySelector('.timeline-card');
+      const cardWidth = card ? card.offsetWidth + 20 : 260;
+      el.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
